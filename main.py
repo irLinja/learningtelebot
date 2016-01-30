@@ -1,30 +1,38 @@
-from telebot import TeleBot
+import telebot
 import ConfigParser
 
+# Reading needed config sections
 conf_parse = ConfigParser.RawConfigParser()
 conf_parse.read('bot.conf')
 _BOT_token = conf_parse.get('bot', 'token')
 
-bot = TeleBot(__name__)
-
-@bot.route('/command ?(.*)')
-def example_command(message, cmd):
-    chat_dest = message['chat']['id']
-    msg = u"Command Recieved: {}".format(cmd)
-
-    bot.send_message(chat_dest, msg)
+bot = telebot.TeleBot(_BOT_token)
 
 
-@bot.route('(?!/).+')
-def parrot(message):
-    chat_dest = message['chat']['id']
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+    bot.reply_to(message, "Howdy, how are you doing?")
+
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, message.text)
+
+
+'''
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    msg = u"Welcome this is telebot (:"
+
+    bot.send_message(message, message.text)
+
+
+@bot.message_handler(func=lambda message: True)
+def echo(message):
     user_msg = message['text']
 
     msg = u"Did you say {}?".format(user_msg)
-    bot.send_message(chat_dest, msg)
+    bot.reply_to(message, message.text)
+'''
 
+bot.polling()
 
-if __name__ == '__main__':
-    bot.config['api_key'] = _BOT_token
-    bot.poll(debug=True)
-    #bot.polling(none_stop=True)

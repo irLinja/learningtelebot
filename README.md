@@ -8,7 +8,5 @@ This robot will test:
 
 
 ## Required modules
-> telebot
-
+> pyTelegramBotAPI
 > ConfigParser
-
