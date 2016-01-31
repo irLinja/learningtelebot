@@ -6,7 +6,8 @@ This robot will test:
  - group messaging
  - new inline features
 
-
 ## Required modules
 > pyTelegramBotAPI
+
 > ConfigParser
+
